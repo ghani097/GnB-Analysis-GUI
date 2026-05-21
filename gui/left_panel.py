@@ -22,26 +22,29 @@ class LeftPanel(ctk.CTkFrame):
 
         self._build()
 
-    def _build(self):
-        pad = {"padx": 10, "pady": 4, "fill": "x"}
+    @staticmethod
+    def _p(pady=4) -> dict:
+        """Return pack kwargs with consistent padx/fill and caller-specified pady."""
+        return {"padx": 10, "pady": pady, "fill": "x"}
 
+    def _build(self):
         # ── Data Configuration ───────────────────────────────────────────────
-        SectionLabel(self, text="Data Configuration").pack(**pad, pady=(12, 2))
+        SectionLabel(self, text="Data Configuration").pack(**self._p((12, 2)))
 
         self.raw_folder   = FolderPicker(self, "Root Data Folder")
-        self.raw_folder.pack(**pad)
+        self.raw_folder.pack(**self._p())
 
         self.heights_file = FilePicker(
             self, "Heights/Weights File",
             filetypes=[("Excel/CSV", "*.xlsx *.xls *.csv"), ("All files", "*.*")],
         )
-        self.heights_file.pack(**pad)
+        self.heights_file.pack(**self._p())
 
         self.output_folder = FolderPicker(self, "Output Folder")
-        self.output_folder.pack(**pad)
+        self.output_folder.pack(**self._p())
 
         # ── Recording Mode ───────────────────────────────────────────────────
-        SectionLabel(self, text="Recording Mode").pack(**pad, pady=(12, 2))
+        SectionLabel(self, text="Recording Mode").pack(**self._p((12, 2)))
 
         self._mode_var = ctk.StringVar(value="Default")
         self._mode_seg = ctk.CTkSegmentedButton(
@@ -49,7 +52,7 @@ class LeftPanel(ctk.CTkFrame):
             variable=self._mode_var,
             command=self._on_mode_change,
         )
-        self._mode_seg.pack(**pad)
+        self._mode_seg.pack(**self._p())
 
         # Custom sub-frame (hidden by default)
         self._custom_frame = ctk.CTkFrame(self, fg_color="#1e2a35", corner_radius=6)
@@ -71,21 +74,21 @@ class LeftPanel(ctk.CTkFrame):
         self._custom_warning.pack(fill="x", padx=8, pady=(0, 4))
 
         # ── MATLAB ───────────────────────────────────────────────────────────
-        SectionLabel(self, text="MATLAB").pack(**pad, pady=(12, 2))
+        SectionLabel(self, text="MATLAB").pack(**self._p((12, 2)))
 
         self.matlab_exe = FilePicker(
             self, "MATLAB Executable",
             filetypes=[("Executable", "*.exe"), ("All files", "*.*")],
         )
-        self.matlab_exe.pack(**pad)
+        self.matlab_exe.pack(**self._p())
         ctk.CTkButton(self, text="Auto-Detect MATLAB",
                       command=self._auto_detect_matlab,
-                      height=28).pack(**pad)
+                      height=28).pack(**self._p())
 
         # ── Repo Root ────────────────────────────────────────────────────────
-        SectionLabel(self, text="Existing Analysis Repo").pack(**pad, pady=(12, 2))
+        SectionLabel(self, text="Existing Analysis Repo").pack(**self._p((12, 2)))
         self.repo_root = FolderPicker(self, "Repo Root")
-        self.repo_root.pack(**pad)
+        self.repo_root.pack(**self._p())
 
         # Try to pre-fill repo root from known path
         known = r"E:\GIT_HUB_MAIN\Gait and Balance\Gait-and-Balance-Streamlined-Analysis"
@@ -99,7 +102,7 @@ class LeftPanel(ctk.CTkFrame):
 
         # ── Run / Cancel ─────────────────────────────────────────────────────
         btn_frame = ctk.CTkFrame(self, fg_color="transparent")
-        btn_frame.pack(**pad, pady=(14, 4))
+        btn_frame.pack(**self._p((14, 4)))
         self._run_btn = ctk.CTkButton(
             btn_frame, text="Run Pipeline ▶",
             command=self._on_run,
@@ -116,9 +119,9 @@ class LeftPanel(ctk.CTkFrame):
         self._cancel_btn.pack(side="left")
 
         # ── Log ──────────────────────────────────────────────────────────────
-        SectionLabel(self, text="Log").pack(**pad, pady=(10, 2))
+        SectionLabel(self, text="Log").pack(**self._p((10, 2)))
         self._log = LogConsole(self, log_queue=self._log_queue, height=220)
-        self._log.pack(**pad, pady=(0, 10))
+        self._log.pack(**self._p((0, 10)))
 
     # ── Mode transitions ──────────────────────────────────────────────────────
 
