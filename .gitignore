@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+.venv
+venv/
+env/
+
+# Pipeline outputs (generated files — don't commit)
+*.xlsx
+*.mat
+*.csv
+fig*.png
+fresh_analysis_report.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
